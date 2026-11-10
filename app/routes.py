@@ -51,8 +51,9 @@ def create_booking():
         db.session.add(booking)
         db.session.commit()
     except SQLAlchemyError:
-        db.session.rollback()
-        return jsonify({"error": "Could not save booking"}), 500
+    db.session.rollback()
+    current_app.logger.exception("Database error while saving booking")
+    return jsonify({"error": "Could not save booking"}), 500
     return jsonify({
         "message": "Enquiry received",
         "booking": {
