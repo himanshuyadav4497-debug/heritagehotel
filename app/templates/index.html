@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Heritage Hotel | Booking Enquiry</title>
+  <style>
+    body{font-family:system-ui,sans-serif;background:#f5f6f8;color:#202733;margin:0;padding:2rem 1rem}
+    main{max-width:620px;margin:auto;background:#fff;padding:2rem;border-radius:16px;box-shadow:0 8px 28px #15223812}
+    h1{margin-top:0;color:#9a4b20}label{display:block;margin:1rem 0 .35rem;font-weight:600}
+    input,textarea,button{box-sizing:border-box;width:100%;padding:.8rem;border:1px solid #cbd2dc;border-radius:8px;font:inherit}
+    button{margin-top:1.2rem;background:#c65b1a;color:#fff;border:0;font-weight:700;cursor:pointer}
+    #result{margin-top:1rem;white-space:pre-wrap}.hint{color:#596579}
+  </style>
+</head>
+<body><main>
+  <h1>Heritage Hotel</h1><p class="hint">Send a booking enquiry. Our team will follow up to confirm availability.</p>
+  <form id="booking-form">
+    <label for="guest_name">Guest name</label><input id="guest_name" name="guest_name" required maxlength="120">
+    <label for="email">Email</label><input id="email" name="email" type="email" required maxlength="254">
+    <label for="check_in">Check-in</label><input id="check_in" name="check_in" type="date" required>
+    <label for="check_out">Check-out</label><input id="check_out" name="check_out" type="date" required>
+    <label for="guests">Guests (1–12)</label><input id="guests" name="guests" type="number" min="1" max="12" value="1" required>
+    <label for="message">Additional requests</label><textarea id="message" name="message" rows="3" maxlength="1000"></textarea>
+    <button type="submit">Send enquiry</button>
+  </form><p id="result" role="status"></p>
+</main>
+<script>
+
+document.getElementById('booking-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // Keep a reference to the form before the first await.
+    const bookingForm = event.currentTarget;
+
+    const formData = new FormData(bookingForm);
+    const payload = Object.fromEntries(formData.entries());
+    payload.guests = Number(payload.guests);
+
+    const result = document.getElementById('result');
+    result.textContent = 'Sending…';
+
+    try {
+        const response = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json().catch(() => ({
+            error: 'Server returned an invalid response.'
+        }));
+
+        if (!response.ok) {
+            result.textContent = `Could not submit: ${data.error || 'Unknown server error'}`;
+            return;
+        }
+
+        result.textContent = `Enquiry received. Reference: ${data.booking.id}`;
+
+        // Use the saved reference, not event.currentTarget.
+        bookingForm.reset();
+
+    } catch (error) {
+        console.error('Enquiry submission failed:', error);
+        result.textContent = `Request failed: ${error.message}`;
+    }
+});
+
+</script></body></html>
