@@ -1,6 +1,5 @@
 from datetime import date
-
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, request, render_template, current_app
 from sqlalchemy.exc import SQLAlchemyError
 
 from . import db
