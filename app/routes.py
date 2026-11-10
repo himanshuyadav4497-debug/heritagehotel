@@ -1,6 +1,8 @@
 from datetime import date
-from flask import Blueprint, jsonify, request, render_template
+
+from flask import Blueprint, jsonify, render_template, request
 from sqlalchemy.exc import SQLAlchemyError
+
 from . import db
 from .models import Booking
 

@@ -20,7 +20,6 @@ def create_app(test_config=None):
 
     db.init_app(app)
 
-    from .models import Booking
     from .routes import api
 
     app.register_blueprint(api)

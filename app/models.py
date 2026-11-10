@@ -1,5 +1,7 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from . import db
+
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -9,4 +11,4 @@ class Booking(db.Model):
     check_out = db.Column(db.Date, nullable=False)
     guests = db.Column(db.Integer, nullable=False, default=1)
     message = db.Column(db.String(1000), nullable=True)
-    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(UTC))
