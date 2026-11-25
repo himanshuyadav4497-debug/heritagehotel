@@ -1,71 +1,46 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Heritage Hotel | Booking Enquiry</title>
-  <style>
-    body{font-family:system-ui,sans-serif;background:#f5f6f8;color:#202733;margin:0;padding:2rem 1rem}
-    main{max-width:620px;margin:auto;background:#fff;padding:2rem;border-radius:16px;box-shadow:0 8px 28px #15223812}
-    h1{margin-top:0;color:#9a4b20}label{display:block;margin:1rem 0 .35rem;font-weight:600}
-    input,textarea,button{box-sizing:border-box;width:100%;padding:.8rem;border:1px solid #cbd2dc;border-radius:8px;font:inherit}
-    button{margin-top:1.2rem;background:#c65b1a;color:#fff;border:0;font-weight:700;cursor:pointer}
-    #result{margin-top:1rem;white-space:pre-wrap}.hint{color:#596579}
-  </style>
-</head>
-<body><main>
-  <h1>Heritage Hotel</h1><p class="hint">Send a booking enquiry. Our team will follow up to confirm availability.</p>
-  <form id="booking-form">
-    <label for="guest_name">Guest name</label><input id="guest_name" name="guest_name" required maxlength="120">
-    <label for="email">Email</label><input id="email" name="email" type="email" required maxlength="254">
-    <label for="check_in">Check-in</label><input id="check_in" name="check_in" type="date" required>
-    <label for="check_out">Check-out</label><input id="check_out" name="check_out" type="date" required>
-    <label for="guests">Guests (1–12)</label><input id="guests" name="guests" type="number" min="1" max="12" value="1" required>
-    <label for="message">Additional requests</label><textarea id="message" name="message" rows="3" maxlength="1000"></textarea>
-    <button type="submit">Send enquiry</button>
-  </form><p id="result" role="status"></p>
-</main>
-<script>
-
-document.getElementById('booking-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    // Keep a reference to the form before the first await.
-    const bookingForm = event.currentTarget;
-
-    const formData = new FormData(bookingForm);
-    const payload = Object.fromEntries(formData.entries());
-    payload.guests = Number(payload.guests);
-
-    const result = document.getElementById('result');
-    result.textContent = 'Sending…';
-
-    try {
-        const response = await fetch('/api/bookings', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json().catch(() => ({
-            error: 'Server returned an invalid response.'
-        }));
-
-        if (!response.ok) {
-            result.textContent = `Could not submit: ${data.error || 'Unknown server error'}`;
-            return;
-        }
-
-        result.textContent = `Enquiry received. Reference: ${data.booking.id}`;
-
-        // Use the saved reference, not event.currentTarget.
-        bookingForm.reset();
-
-    } catch (error) {
-        console.error('Enquiry submission failed:', error);
-        result.textContent = `Request failed: ${error.message}`;
-    }
-});
-
-</script></body></html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17251f">
+<title>Heritage Hotel | A Stay to Remember</title>
+<style>
+:root{--ink:#203027;--cream:#f7f3eb;--gold:#c7a66a;--muted:#6e756d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Georgia,"Times New Roman",serif;color:var(--ink);background:var(--cream)}
+a{color:inherit;text-decoration:none}.topbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(20px,6vw,88px);background:#17251f;color:white}
+.brand{font-size:22px;letter-spacing:2px}.brand small{display:block;color:var(--gold);font:10px Arial,sans-serif;letter-spacing:4px;margin-top:6px}
+nav{display:flex;align-items:center;gap:26px;font:13px Arial,sans-serif;letter-spacing:1px}nav a:hover{color:var(--gold)}.nav-cta{border:1px solid var(--gold);padding:12px 18px;color:#f5dfb4}
+.hero{min-height:610px;display:flex;align-items:center;padding:80px clamp(24px,10vw,150px);color:white;background:linear-gradient(90deg,rgba(13,25,20,.84),rgba(13,25,20,.3)),url("https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2000&q=85") center/cover}
+.hero-copy{max-width:680px}.eyebrow{color:#e4c58c;font:12px Arial,sans-serif;letter-spacing:4px;text-transform:uppercase}
+h1{font-size:clamp(44px,7vw,82px);font-weight:400;line-height:1.04;margin:22px 0}.hero p{max-width:540px;color:#eee9df;font:17px/1.8 Arial,sans-serif}
+.button{display:inline-block;margin-top:24px;padding:16px 25px;background:var(--gold);color:#17251f;font:bold 12px Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase}.button:hover{background:#dfc18b}
+.intro{max-width:1000px;margin:auto;padding:90px 24px;text-align:center}.intro h2{font-size:clamp(32px,4vw,48px);font-weight:400;margin:14px 0 20px}.intro p{max-width:720px;margin:auto;color:var(--muted);font:16px/1.9 Arial,sans-serif}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:0 clamp(20px,6vw,88px) 90px}.feature{background:white;padding:32px 28px;border-top:3px solid var(--gold)}
+.feature .num{color:#b38d4e;font:12px Arial,sans-serif;letter-spacing:2px}.feature h3{font-size:25px;font-weight:400;margin:14px 0}.feature p{color:var(--muted);font:14px/1.8 Arial,sans-serif}
+footer{background:#17251f;color:#d9d7ce;padding:30px 24px;text-align:center;font:12px Arial,sans-serif;letter-spacing:1px}
+@media(max-width:700px){.topbar{align-items:flex-start;gap:18px;flex-direction:column}nav{gap:15px;flex-wrap:wrap}.hero{min-height:540px}.features{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="topbar">
+<a class="brand" href="/">HERITAGE HOTEL<small>TIMELESS HOSPITALITY</small></a>
+<nav aria-label="Main navigation"><a href="#welcome">WELCOME</a><a href="#experience">THE EXPERIENCE</a><a class="nav-cta" href="/enquiry">MAKE AN ENQUIRY</a></nav>
+</header>
+<main>
+<section class="hero" id="welcome"><div class="hero-copy">
+<div class="eyebrow">A place to pause. A story to remember.</div>
+<h1>Experience the charm of a timeless stay.</h1>
+<p>Discover warm hospitality, thoughtful comfort and the pleasure of a stay made memorable. We look forward to welcoming you.</p>
+<a class="button" href="/enquiry">Make a booking enquiry&nbsp; →</a>
+</div></section>
+<section class="intro" id="experience">
+<div class="eyebrow">Welcome to Heritage Hotel</div><h2>Where every stay has a story</h2>
+<p>Whether you are planning a relaxing escape or a special visit, our team is here to help you plan your stay. Send us your dates and preferences through our enquiry form, and we will follow up to confirm availability.</p>
+<a class="button" href="/enquiry">Plan your stay</a>
+</section>
+<section class="features" aria-label="Guest experience">
+<article class="feature"><div class="num">01 / COMFORT</div><h3>A restful retreat</h3><p>Make time to unwind in a welcoming setting designed around a comfortable stay.</p></article>
+<article class="feature"><div class="num">02 / HOSPITALITY</div><h3>A warm welcome</h3><p>Our enquiry process helps us understand your plans and the details that matter to you.</p></article>
+<article class="feature"><div class="num">03 / YOUR STAY</div><h3>Made for your plans</h3><p>Share your preferred dates, guest count and any special requests with our team.</p></article>
+</section></main>
+<footer>HERITAGE HOTEL&nbsp; · &nbsp;A STAY TO REMEMBER</footer>
+</body></html>
