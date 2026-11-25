@@ -49,4 +49,3 @@ See `infra/terraform`. Configure AWS credentials securely, provide `container_im
 - Monitoring dashboard / alarm screenshots
 - Architecture diagram and completed runbook
 
-Do not claim cloud deployment, zero downtime, automatic rollback, cost, or test counts unless you have actually measured and captured evidence. The Terraform ECS service uses rolling deployment health checks; a fully automated rollback policy and blue-green release are further implementation work.
